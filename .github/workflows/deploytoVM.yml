@@ -30,8 +30,8 @@ jobs:
     - name: Execute commands on the server
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.VM_HOST }}
-        username: ${{ secrets.VM_USERNAME }}
+        host: 20.235.245.88
+        username: azureuser
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
           cd /home/azureuser/flask-hello-world
