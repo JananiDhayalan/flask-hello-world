@@ -13,18 +13,30 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: "${{ secrets.PRIVATE_KEY }}"
+      #- name: Set up SSH
+      #uses: webfactory/ssh-agent@v0.5.3
+      #with:
+      #  ssh-private-key: "${{ secrets.PRIVATE_KEY }}"
 
-    - name: Deploy to VM
-      run: |
-        ssh -o StrictHostKeyChecking=no azureuser@20.235.245.88 << 'EOF'
+      #- name: Deploy to VM
+      #run: |
+      # ssh -o StrictHostKeyChecking=no azureuser@20.235.245.88 << 'EOF'
+      #cd /home/azureuser/flask-hello-world
+          #git pull origin master
+          #sudo systemctl daemon-reload
+          #sudo systemctl restart flask-hello-world.service
+          #sudo systemctl status flask-hello-world.service
+          #exit
+          #EOF
+    - name: Execute commands on the server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
           cd /home/azureuser/flask-hello-world
           git pull origin master
           sudo systemctl daemon-reload
           sudo systemctl restart flask-hello-world.service
           sudo systemctl status flask-hello-world.service
-          exit
-        EOF
