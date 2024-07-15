@@ -35,6 +35,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
           cd /home/azureuser/flask-hello-world
+          ls -a 
           git add .
           git commit -m "Committing local changes before pull"
           git pull origin master
