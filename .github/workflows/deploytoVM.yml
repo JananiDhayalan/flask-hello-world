@@ -41,3 +41,4 @@ jobs:
           sudo systemctl daemon-reload
           sudo systemctl restart flask-hello-world.service
           sudo systemctl status flask-hello-world.service
+          curl http://127.0.0.0:5000
