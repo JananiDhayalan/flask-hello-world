@@ -27,7 +27,7 @@ jobs:
           #sudo systemctl status flask-hello-world.service
           #exit
           #EOF
-    - name: Execute commands on the server
+    - name: Execute commands on the azure server
       uses: appleboy/ssh-action@master
       with:
         host: 20.235.245.88
