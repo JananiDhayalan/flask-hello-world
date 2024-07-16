@@ -45,10 +45,6 @@ jobs:
           git add .
           git commit -m "Committing all local changes"
           git pull origin
-          git stash || true
-          git fetch origin master
-          git merge FETCH_HEAD || true
-          git stash pop || true
           sudo systemctl daemon-reload
           sudo systemctl restart flask-hello-world.service
           sudo systemctl status flask-hello-world.service
