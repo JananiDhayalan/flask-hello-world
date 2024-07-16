@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code with full depth
-      run:  git fetch --depth=0
+      uses: actions/checkout@v2
 
       
     - name: Execute commands on the azure server
