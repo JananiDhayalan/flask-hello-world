@@ -39,7 +39,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
           cd /home/azureuser/flask-hello-world
-          ls
+          ls -a
           git config --global user.email "shinchanexperimentsingithub@gmail.com"
           git config --global user.name "JananiDhayalan"
           git stash || true
