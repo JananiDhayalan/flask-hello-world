@@ -1,0 +1,30 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code with full depth
+      uses: actions/checkout@v2
+
+      
+    - name: Execute commands on the azure server
+      uses: appleboy/ssh-action@master
+      with:
+        host: 20.235.245.88
+        username: azureuser
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+          cd /home/azureuser/flask-hello-world
+          git stash save "GitHub Actions stash" || true  #Stashes changes
+          git pull origin master
+          git stash pop || true    #Applies stashed changes
+          sudo systemctl daemon-reload
+          sudo systemctl restart flask-hello-world.service
+          sudo systemctl status flask-hello-world.service
