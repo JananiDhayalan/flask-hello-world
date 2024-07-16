@@ -25,7 +25,7 @@ jobs:
 
     - name: Pull latest changes
       run: |
-        git fetch origin main
+        git fetch origin master
         git merge FETCH_HEAD || true
 
     - name: Apply stashed changes if any
@@ -42,7 +42,7 @@ jobs:
           git config --global user.email "shinchanexperimentsingithub@gmail.com"
           git config --global user.name "JananiDhayalan"
           git stash || true
-          git fetch origin main
+          git fetch origin master
           git merge FETCH_HEAD || true
           git stash pop || true
           sudo systemctl daemon-reload
