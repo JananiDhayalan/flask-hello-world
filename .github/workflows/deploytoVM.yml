@@ -10,35 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout code with full depth
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0  # Fetch all history for proper conflict resolution
+        fetch-depth: 0
 
-    - name: Stash local changes
-      run: git stash save "GitHub Actions stash" || true
+    - name: Set up Git user
+      run: |
+        git config --global user.email "shinchanexperimentsingithub@gmail.com"
+        git config --global user.name "JananiDhayalan"
+
+    - name: Stash local changes if any
+      run: git stash || true
 
     - name: Pull latest changes
       run: |
-        git stash pop || true
-        git add .
-        git commit -m "Committing local changes before pull" || true
-        git pull origin main
+        git fetch origin main
+        git merge FETCH_HEAD || true
 
-    - name: Apply stashed changes
+    - name: Apply stashed changes if any
       run: git stash pop || true
 
     - name: Execute commands on the server
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
         script: |
           cd /home/azureuser/flask-hello-world
-          git stash save "GitHub Actions stash" || true
-          git pull origin main
+          git config --global user.email "shinchanexperimentsingithub@gmail.com"
+          git config --global user.name "JananiDhayalan"
+          git stash || true
+          git fetch origin main
+          git merge FETCH_HEAD || true
           git stash pop || true
           sudo systemctl daemon-reload
           sudo systemctl restart flask-hello-world.service
           sudo systemctl status flask-hello-world.service
+

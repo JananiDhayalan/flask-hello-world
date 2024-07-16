@@ -1,0 +1,44 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetch all history for proper conflict resolution
+
+    - name: Stash local changes
+      run: git stash save "GitHub Actions stash" || true
+
+    - name: Pull latest changes
+      run: |
+        git stash pop || true
+        git add .
+        git commit -m "Committing local changes before pull" || true
+        git pull origin main
+
+    - name: Apply stashed changes
+      run: git stash pop || true
+
+    - name: Execute commands on the server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/azureuser/flask-hello-world
+          git stash save "GitHub Actions stash" || true
+          git pull origin main
+          git stash pop || true
+          sudo systemctl daemon-reload
+          sudo systemctl restart flask-hello-world.service
+          sudo systemctl status flask-hello-world.service
